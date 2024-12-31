@@ -37,8 +37,3 @@ class NewUserRegistration:
                 "message": "Item created",
                 "data": new_user.model_dump()
             }
-
-
-
-    # async def create_item(self):
-    #     return {"message": "Item created",}
