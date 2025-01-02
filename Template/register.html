@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login and Signup</title>
-  <link rel="stylesheet" href="D:/SELF/Profile/Profile/static/register.css">
+  <!-- <link rel="stylesheet" href="D:/SELF/Profile/Profile/static/register.css"> -->
+  <link href="{{ url_for('static', path='/register.css') }}" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
@@ -34,7 +35,7 @@
     <!-- Signup Form -->
     <div class="form-container">
       <h2>Signup</h2>
-      <form>
+      <form id="signup-form">
         <div class="input-group">
           <label for="signup-firstname">First Name</label>
           <input type="text" id="first_name" placeholder="Enter your First name" required>
@@ -59,6 +60,7 @@
         <div class="input-group">
           <label for="confirm-password">Confirm password</label>
           <input type="password" id="cnfpassword" placeholder="Confirm your password" required>
+          <label id="mismatch" ></label>
           <a href="#" class="toggle-password">👁️</a>
         </div>
         <button type="submit" class="btn">Signup</button>
@@ -72,30 +74,40 @@
 
 
   <script>
-    first_name = document.getElementById("first_name")
-    last_name = document.getElementById("last_name")
-    mobile = document.getElementById("mobile")
-    email = document.getElementById("email")
-    password = document.getElementById("password")
-    cnf_password = document.getElementById("cnfpassword")
+      document.getElementById("signup-form").addEventListener("submit", function (event) {
+      event.preventDefault();
+      first_name = document.getElementById("first_name").value
+      last_name = document.getElementById("last_name").value
+      mobile = document.getElementById("mobile").value
+      email = document.getElementById("email").value
+      password = document.getElementById("password").value
+      cnf_password = document.getElementById("cnfpassword").value
+      console.log(password,cnf_password);
 
-    if (cnf_password ===password){
+      if (cnf_password === password){
+        axios.post('http://127.0.0.1:8000/app1/items',{
+        "first_name" : first_name,
+        "last_name" : last_name,
+        "email" : email,
+        "mobile" : mobile,
+        "password" :password
+        })
+        .then(response => {
+        console.log(response.data); // Handle the response data
+        })
+        .catch(error => {
+          console.error('Error during POST request:', error); // Handle the error
+        });
 
-    }
-    
+          }
+      else{
+        document.getElementById("mismatch").textContent  = "* password mismatch";
 
-    axios.post('http://127.0.0.1:8000/app1/items',{
-    "first_name" : "sandesh",
-    "last_name" : "salunkhe",
-    "email" : "salunkhe@gmail.com",
-    "mobile" : "9821962855"
-    })
-    .then(response => {
-    console.log(response.data); // Handle the response data
-  })
-  .catch(error => {
-    console.error('Error during POST request:', error); // Handle the error
-  });
+      }
+      });
+
+
+
 
   </script>
 </body>

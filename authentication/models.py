@@ -8,3 +8,4 @@ class NewUser(BaseModel):
     last_name : str
     email : str
     mobile : str
+    password : str
