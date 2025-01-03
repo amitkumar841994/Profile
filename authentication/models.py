@@ -9,3 +9,8 @@ class NewUser(BaseModel):
     email : str
     mobile : str
     password : str
+
+class UserLogin(BaseModel):
+    username:str|None
+    password:str
+    email:str|None

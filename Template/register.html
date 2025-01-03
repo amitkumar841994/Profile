@@ -93,7 +93,8 @@
         "password" :password
         })
         .then(response => {
-        console.log(response.data); // Handle the response data
+        console.log(response.data);
+        document.getElementById('signup-form').reset() 
         })
         .catch(error => {
           console.error('Error during POST request:', error); // Handle the error
