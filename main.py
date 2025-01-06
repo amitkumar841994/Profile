@@ -23,4 +23,12 @@ app.include_router(auth_routes, prefix="/app1", tags=["App1"])
 
 @app.get("/")
 async def root(request:Request):
-    return templates.TemplateResponse("register.html",{"request":request})
+    return templates.TemplateResponse("index.html",{"request":request})
+
+@app.get("/register")
+async def register(request: Request):
+    return templates.TemplateResponse("register.html", {"request": request})
+
+@app.get("/userlogin")
+async def register(request: Request):
+    return templates.TemplateResponse("userlogin.html", {"request": request})

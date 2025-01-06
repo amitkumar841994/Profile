@@ -11,6 +11,6 @@ class NewUser(BaseModel):
     password : str
 
 class UserLogin(BaseModel):
-    username:str|None
+    username:str|None = None
     password:str
-    email:str|None
+    email:str|None =None

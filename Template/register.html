@@ -10,28 +10,6 @@
 </head>
 <body>
   <div class="container">
-    <!-- Login Form -->
-    <!-- <div class="form-container">
-      <h2>Login</h2>
-      <form>
-        <div class="input-group">
-          <label for="email">Email</label>
-          <input type="email" id="email" placeholder="Enter your email" required>
-        </div>
-        <div class="input-group">
-          <label for="password">Password</label>
-          <input type="password" id="password" placeholder="Enter your password" required>
-          <a href="#" class="toggle-password">👁️</a>
-        </div>
-        <a href="#" class="forgot-password">Forgot password?</a>
-        <button type="submit" class="btn">Login</button>
-        <p>Don't have an account? <a href="#">Signup</a></p>
-        <div class="or">Or</div>
-        <button type="button" class="social-btn facebook">Login with Facebook</button>
-        <button type="button" class="social-btn google">Login with Google</button>
-      </form>
-    </div> -->
-
     <!-- Signup Form -->
     <div class="form-container">
       <h2>Signup</h2>
@@ -85,7 +63,7 @@
       console.log(password,cnf_password);
 
       if (cnf_password === password){
-        axios.post('http://127.0.0.1:8000/app1/items',{
+        axios.post('http://127.0.0.1:8000/app1/register',{
         "first_name" : first_name,
         "last_name" : last_name,
         "email" : email,
@@ -100,7 +78,7 @@
           console.error('Error during POST request:', error); // Handle the error
         });
 
-          }
+      }
       else{
         document.getElementById("mismatch").textContent  = "* password mismatch";
 
