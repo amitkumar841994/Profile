@@ -7,6 +7,7 @@
   <!-- <link rel="stylesheet" href="D:/SELF/Profile/Profile/static/register.css"> -->
   <link href="{{ url_for('static', path='/register.css') }}" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="{{ url_for('static', path='js/toaster.js') }}"></script>
 </head>
 <body>
   <div class="container">
@@ -43,8 +44,7 @@
         </div>
         <button type="submit" class="btn">Signup</button>
         <p>Already have an account? <a href="#">Login</a></p>
-        <div class="or">Or</div>
-        <button type="button" class="social-btn google">Signup with Google</button>
+
       </form>
     </div>
   </div>
@@ -72,6 +72,14 @@
         })
         .then(response => {
         console.log(response.data);
+        if (response.data.status_code==200){
+            toastfunc('green', response.data.message)
+            }
+            else{
+                toastfunc('red', response.data.message)
+
+            }
+
         document.getElementById('signup-form').reset() 
         })
         .catch(error => {

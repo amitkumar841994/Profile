@@ -40,6 +40,7 @@ class NewUserRegistration:
 
     async def user_login(self,login:UserLogin):
         try:
+            print(">>>>>>>>>",login)
             user_details = db.User.find_one(
                 {"$or": [{"email": login.username}, {"mobile": login.username}]}
             )
