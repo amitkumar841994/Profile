@@ -1,0 +1,107 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f3f2ef;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 20px;
+}
+
+header h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.buttons button {
+    display: block;
+    width: 300px;
+    margin: 10px auto;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.google-btn {
+    background-color: #4285F4;
+    color: white;
+}
+
+.microsoft-btn {
+    background-color: #F3F2EF;
+    border: 1px solid #666;
+    color: black;
+}
+
+.email-btn {
+    background-color: #0073b1;
+    color: white;
+}
+
+p {
+    font-size: 14px;
+    color: #555;
+}
+
+p a {
+    color: #0073b1;
+    text-decoration: none;
+}
+
+p a:hover {
+    text-decoration: underline;
+}
+
+.join-now {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.illustration img {
+    max-width: 100%;
+    height: auto;
+    margin: 20px 0;
+}
+
+.explore {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 30px;
+}
+
+.explore h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.explore p {
+    font-size: 14px;
+    color: #777;
+}
+
+.categories {
+    margin-top: 20px;
+}
+
+.categories span {
+    display: inline-block;
+    margin: 5px;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 14px;
+    color: #555;
+    cursor: pointer;
+}
+
+.categories span:hover {
+    background-color: #f0f0f0;
+}
