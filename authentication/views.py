@@ -1,9 +1,11 @@
-from fastapi import APIRouter,Depends,Request
+from fastapi import APIRouter,Depends,Request,HTTPException
 from authentication.models import NewUser,UserLogin
 import uuid
 from config import db
 from utils.password import pwd_context,create_access_token,create_refresh_token
 import json
+from authentication.auth_config import google
+from fastapi.responses import RedirectResponse
 
 
 class NewUserRegistration:
@@ -11,6 +13,9 @@ class NewUserRegistration:
         self.router = APIRouter()
         self.router.add_api_route("/register", self.register, methods=["POST"])
         self.router.add_api_route("/login", self.user_login, methods=["POST"])
+        self.router.add_api_route("/login1", self.login, methods=["GET"])
+        self.router.add_api_route("/auth_login", self.auth, methods=["GET"],name="login2")
+
 
     async def register(self, new_user:NewUser):
         if not new_user.user_id:
@@ -71,3 +76,39 @@ class NewUserRegistration:
 
         except Exception as e:
             return {"message": f"{str(e)}", "status_code": 500}
+
+
+    async def login(self, request: Request):
+        # Generate a new state value and store it in the session
+        state = str(uuid.uuid4())
+        request.session['state'] = state
+        
+        redirect_uri = request.url_for("auth_login")  # Redirect after successful login
+        redirect_uri("redirect>>>>",redirect_uri)
+        google_auth_url = google.authorize_url(
+            redirect_uri=redirect_uri,
+            state=state,  # Send the state with the request
+            scope=["openid", "email", "profile"]
+        )
+        
+        return RedirectResponse(url=google_auth_url)
+
+    async def auth(self, request: Request):
+        # Fetch the state from session and received state from URL
+        state_sent = request.session.get('state')
+        state_received = request.query_params.get('state')
+
+        print(state_received, state_sent)
+        
+        # Compare state values
+        if state_sent != state_received:
+            raise HTTPException(status_code=400, detail="CSRF token mismatch")
+        
+        # Proceed with OAuth token exchange
+        try:
+            token = await google.authorize_access_token(request)
+            user_info = await google.get("userinfo", token=token)
+            return {"message": "Authentication successful", "user_info": user_info.json()}
+        except Exception as e:
+            print(f"Error: {e}")
+            raise HTTPException(status_code=400, detail="Authentication failed")

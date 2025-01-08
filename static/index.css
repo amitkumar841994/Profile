@@ -43,6 +43,11 @@ header h1 {
 .email-btn {
     background-color: #0073b1;
     color: white;
+
+
+}
+a {
+    text-decoration: none;
 }
 
 p {
