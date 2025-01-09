@@ -54,22 +54,22 @@
         </section>
     </div>
     <script>
-
-// Select the Google button
-const googleBtn = document.querySelector('.google-btn');
-
-// Add a click event listener to the button
-googleBtn.addEventListener('click', () => {
-    // Dynamically use the state from the backend (inserted by FastAPI)
-    const state = "{{ state }}";  // This will be the state value passed from the backend
-
-    const googleAuthUrl = `https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=540078242760-5sb5vsq6v09abikto5r7dknck37canei.apps.googleusercontent.com&redirect_uri=http%3A%2F%2F127.0.0.1%3A8000%2Fapp1%2Fauth_login&scope=openid+email+profile&state=${state}`;
-
-    // Redirect the user to the Google auth URL
-    window.location.href = googleAuthUrl;
-});
-
-
-</script>
+        // Select the Google button
+        const googleBtn = document.querySelector('.google-btn');
+    
+        // Add a click event listener to the button
+        googleBtn.addEventListener('click', () => {
+            // Dynamically use the state from the backend (inserted by FastAPI)
+            const state = "{{ state }}";  // This will be the state value passed from the backend
+            console.log("State: " + state);
+    
+            // This URL should point to your FastAPI `/login1` endpoint
+            const googleAuthUrl = `http://127.0.0.1:8000/app1/login1`;  // Adjust if needed based on your URL
+            console.log("Redirecting to: " + googleAuthUrl);
+    
+            // Redirect the user to the Google auth URL
+            window.location.href = googleAuthUrl;
+        });
+    </script>
 </body>
 </html>

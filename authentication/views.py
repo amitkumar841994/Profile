@@ -4,8 +4,17 @@ import uuid
 from config import db
 from utils.password import pwd_context,create_access_token,create_refresh_token
 import json
-from authentication.auth_config import google
+from authentication.auth_config import google,oauth
 from fastapi.responses import RedirectResponse
+import uuid
+import secrets
+
+from dotenv import load_dotenv
+import os
+load_dotenv()
+
+client_id=os.getenv("client_id"),
+client_secret=os.getenv("client_secret")
 
 
 class NewUserRegistration:
@@ -78,27 +87,39 @@ class NewUserRegistration:
             return {"message": f"{str(e)}", "status_code": 500}
 
 
+
+
     async def login(self, request: Request):
-        # Generate a new state value and store it in the session
-        state = str(uuid.uuid4())
+        print("Login endpoint accessed",client_id)  # Debugging log
+
+        # Generate a unique state value
+        state = secrets.token_urlsafe(16)
+        print("Generated state:", state)  # Debugging log
+
+        # Store the state in the session
         request.session['state'] = state
-        
-        redirect_uri = request.url_for("auth_login")  # Redirect after successful login
-        redirect_uri("redirect>>>>",redirect_uri)
-        google_auth_url = google.authorize_url(
-            redirect_uri=redirect_uri,
-            state=state,  # Send the state with the request
-            scope=["openid", "email", "profile"]
-        )
-        
-        return RedirectResponse(url=google_auth_url)
+
+        # Generate the redirect URI dynamically
+        redirect_uri = request.url_for("login2")  # Matches the route name for 'auth_login'
+        print("Redirect URI:", redirect_uri)  # Debugging log
+
+        authorization_url = await google.create_authorization_url(redirect_uri, state=state)
+
+    # Redirect to Google OAuth URL
+        # return RedirectResponse(authorization_url)
+        print("Google Auth URL:",authorization_url )  # Debugging log
+
+        # Redirect to Google OAuth
+        return RedirectResponse(str(authorization_url))
+
+
 
     async def auth(self, request: Request):
         # Fetch the state from session and received state from URL
         state_sent = request.session.get('state')
         state_received = request.query_params.get('state')
 
-        print(state_received, state_sent)
+        print("state checking",state_received, state_sent)
         
         # Compare state values
         if state_sent != state_received:
@@ -106,8 +127,11 @@ class NewUserRegistration:
         
         # Proceed with OAuth token exchange
         try:
+            print("OAuth token exchange>>>>>")
             token = await google.authorize_access_token(request)
+            print("OAuth token>>>>>>>>",token)
             user_info = await google.get("userinfo", token=token)
+            print("OAuth token>>>>>>>>11111111111111")
             return {"message": "Authentication successful", "user_info": user_info.json()}
         except Exception as e:
             print(f"Error: {e}")
