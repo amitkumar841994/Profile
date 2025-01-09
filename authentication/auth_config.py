@@ -7,8 +7,8 @@ load_dotenv()
 oauth = OAuth()
 google = oauth.register(
     name="google",
-    client_id=os.getenv("GOOGLE_CLIENT_ID"),
-    client_secret=os.getenv("GOOGLE_CLIENT_SECRET"),
+    client_id=os.getenv("client_id"),
+    client_secret=os.getenv("client_secret"),
     access_token_url="https://oauth2.googleapis.com/token",
     access_token_params=None,
     authorize_url="https://accounts.google.com/o/oauth2/auth",
