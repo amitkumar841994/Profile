@@ -51,6 +51,13 @@
                 console.log();
                 if (response.data.status_code==200){
                 toastfunc('green', response.data.message)
+                // window.location.href = '/dashboard';
+                // window.location.pathname = '/dashboard';
+                history.pushState({ page: "dashboard" }, "Dashboard", "/dashboard");
+                loadDashboardContent()
+                
+
+
                 }
                 else{
                     toastfunc('red', response.data.message)
@@ -61,6 +68,29 @@
             console.error('Error during POST request:', error); 
             });
         });
+
+
+    function loadDashboardContent() {
+    // Here you can dynamically load content (like fetching dashboard data)
+    document.getElementById('content').innerHTML = `
+        <h2>Welcome to your Dashboard</h2>
+        <p>This is the dashboard content that was loaded dynamically.</p>
+    `;
+}
+window.addEventListener('popstate', function(event) {
+    if (event.state && event.state.page === "dashboard") {
+        // Load the content for the dashboard page
+        loadDashboardContent();
+    } else {
+        // Handle the login page or other pages
+        document.getElementById('content').innerHTML = `
+            <h2>Please log in to continue.</h2>
+            <form id="login-form"> 
+                <!-- Login form content here -->
+            </form>
+        `;
+    }
+});
     
 
 </script>

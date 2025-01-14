@@ -24,6 +24,7 @@ app.add_middleware(
 
 templates = Jinja2Templates(directory='Template')
 app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/Template", StaticFiles(directory="Template"), name="Template")
 
 
 # Include routers from each app
@@ -41,3 +42,7 @@ async def register(request: Request):
 @app.get("/userlogin",name="userlogin")
 async def register(request: Request):
     return templates.TemplateResponse("userlogin.html", {"request": request})
+
+@app.get("/dashboard",name="dashboard")
+async def register(request: Request):
+    return templates.TemplateResponse("home.html", {"request": request})

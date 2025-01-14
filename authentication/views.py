@@ -80,7 +80,7 @@ class NewUserRegistration:
                     return {"message": "Username or Password is invalid", "status_code": 401}
                 
             else:
-                return {"message": "Not registerd user", "status_code": 40}
+                return {"message": "Not registerd user", "status_code": 400}
 
 
         except Exception as e:
