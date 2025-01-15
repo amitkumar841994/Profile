@@ -44,5 +44,5 @@ async def register(request: Request):
     return templates.TemplateResponse("userlogin.html", {"request": request})
 
 @app.get("/dashboard",name="dashboard")
-async def register(request: Request):
+async def dashboard(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
