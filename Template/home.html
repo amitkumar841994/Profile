@@ -46,12 +46,12 @@
           <div class="logo-header" data-background-color="dark">
             <a href="home.html" class="logo">
               <img
-                src="assets/img/kaiadmin/logo_light.svg"
+                src="{{ url_for('Template', path='assets/img/kaiadmin/logo_light.svg') }}"
                 alt="navbar brand"
                 class="navbar-brand"
                 height="20"
               />
-            </a>
+            </a> 
             <div class="nav-toggle">
               <button class="btn btn-toggle toggle-sidebar">
                 <i class="gg-menu-right"></i>
@@ -83,7 +83,7 @@
                 <div class="collapse" id="dashboard">
                   <ul class="nav nav-collapse">
                     <li>
-                      <a href="../demo1/index.html">
+                      <a href="{{ url_for('Template', path='../demo1/index.html') }}">
                         <span class="sub-item">Dashboard 1</span>
                       </a>
                     </li>
@@ -655,14 +655,14 @@
                   >
                     <div class="avatar-sm">
                       <img
-                        src="assets/img/profile.jpg"
+                        src="{{ url_for('Template', path='assets/img/user.png') }}"
                         alt="..."
                         class="avatar-img rounded-circle"
                       />
                     </div>
-                    <span class="profile-username">
+                    <span class="profile-username" >
                       <span class="op-7">Hi,</span>
-                      <span class="fw-bold">Hizrian</span>
+                      <span class="fw-bold" id="user-name"></span>
                     </span>
                   </a>
                   <ul class="dropdown-menu dropdown-user animated fadeIn">
@@ -671,7 +671,7 @@
                         <div class="user-box">
                           <div class="avatar-lg">
                             <img
-                              src="assets/img/profile.jpg"
+                              src="{{ url_for('Template', path='assets/img/user.png') }}"
                               alt="image profile"
                               class="avatar-img rounded"
                             />
@@ -1054,7 +1054,9 @@
                       </div>
                     </div>
                     <div class="card-list py-4">
-                      <div class="item-list">
+                      <div class="item-list"> sdgsdfg
+
+
                         <div class="avatar">
                           <img
                             src="assets/img/jm_denis.jpg"
@@ -1617,8 +1619,21 @@
       });
     </script>
     <script>
-      const userDetails = JSON.parse(localStorage.getItem("Userdetails"));
-      console.log("this home page>>>>>>",userDetails);
+        const userDetails = JSON.parse(localStorage.getItem("Userdetails"));
+        if (userDetails) {
+          console.log("User details true");
+
+          for (let userKey in userDetails.UserDetails) {
+            const user = userDetails.UserDetails[userKey]; // Get the actual user object
+            // console.log("current user: " + user.email); // Assuming user.email exists
+            console.log(userKey + ': ' + userDetails.UserDetails[userKey]);
+            if(userKey === "first_name"){
+            document.getElementById("user-name").innerHTML = userDetails.UserDetails[userKey]; // Assuming user.first_name exists
+            }
+          }
+        }
+        // console.log("this home page>>>>>>", userDetails);
+
        
 
     </script>
