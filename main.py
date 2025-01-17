@@ -1,5 +1,6 @@
 from fastapi import FastAPI,Request
 from authentication.routes import router as auth_routes
+from dashboard.routes import router as userexp
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -28,7 +29,8 @@ app.mount("/Template", StaticFiles(directory="Template"), name="Template")
 
 
 # Include routers from each app
-app.include_router(auth_routes, prefix="/app1", tags=["App1"])
+app.include_router(auth_routes, prefix="/user", tags=["App1"])
+app.include_router(userexp, prefix="/userexp", tags=["App2"])
 
 @app.get("/")
 async def root(request:Request):
