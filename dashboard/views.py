@@ -51,7 +51,7 @@ class UserJobsExperience:
 class GitRepo:
     def __init__(self):
         self.router = APIRouter()
-        self.router.add_api_route('/git/repo/',self.gitrepocreate,methods=['POST'])
+        self.router.add_api_route('/git/repo/',self.gitrepocreate,methods=['GEt'])
 
 
     def gitrepocreate(self):
