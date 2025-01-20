@@ -2,6 +2,7 @@ from fastapi import APIRouter,Depends,Request,HTTPException
 from dashboard.models import UserExpericeModel
 from config import db
 import requests
+from datetime import datetime, timedelta
 
 
 class UserDashboard:
@@ -51,7 +52,8 @@ class UserJobsExperience:
 class GitRepo:
     def __init__(self):
         self.router = APIRouter()
-        self.router.add_api_route('/git/repo/',self.gitrepocreate,methods=['GEt'])
+        self.router.add_api_route('/git/repo/',self.gitrepocreate,methods=['GET'])
+        self.router.add_api_route('/git/contro/',self.fetch_contributions,methods=['GET'])
 
 
     def gitrepocreate(self):
@@ -62,8 +64,17 @@ class GitRepo:
             repo_count = len(response.json())
             repo_list=[]
             for link in response.json():
-                print("repo_count",link.get('full_name'))
-                repo_list.append(link.get('full_name'))
+                print("repo_count",link.get('owner').get("avatar_url"))
+                # repo_list.append(link.get('full_name'))
+                repo_data = {
+                    'repo_name':link.get('full_name'),
+                    'repo_img' : link.get('owner').get("avatar_url")
+
+                }
+                repo_list.append(repo_data)
+
+                
+                
 
             data={"repo_list":repo_list,"repo_count":repo_count}
             return {
@@ -80,3 +91,51 @@ class GitRepo:
                 }         
 
 
+ 
+
+
+    def fetch_contributions(self, ):
+        # Base URL for fetching events
+        username ="amitkumar841994"
+        api_url = f"https://api.github.com/users/{username}/events"
+
+
+        try:
+            # Make the API request
+            response = requests.get(api_url)
+            response.raise_for_status()
+
+            # Parse the JSON response
+            events = response.json()
+
+            # Process contributions
+            contributions = {}
+            for event in events:
+                if event['type'] in ['PushEvent', 'PullRequestEvent', 'IssuesEvent']:
+                    event_date = event['created_at'][:10]  # Extract date in 'YYYY-MM-DD' format
+                    contributions[event_date] = contributions.get(event_date, 0) + 1
+
+            # Fill in missing dates for the past year
+            today = datetime.utcnow().date()
+            one_year_ago = today - timedelta(days=365)
+
+            daily_contributions = []
+            current_date = one_year_ago
+            while current_date <= today:
+                daily_contributions.append({
+                    'date': current_date.isoformat(),
+                    'count': contributions.get(current_date.isoformat(), 0)
+                })
+                current_date += timedelta(days=1)
+
+            return {
+                "message": "Fetched successfully",
+                "data": daily_contributions,
+                "status_code": 200
+            }
+
+        except requests.exceptions.RequestException as e:
+            return {
+                "message": f"Error fetching contributions: {str(e)}",
+                "status_code": 500
+            }
