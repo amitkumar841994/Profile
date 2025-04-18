@@ -769,48 +769,8 @@
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6 col-md-3">
-                <div class="card card-stats card-round">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-icon">
-                        <div
-                          class="icon-big text-center icon-success bubble-shadow-small"
-                        >
-                          <i class="fas fa-luggage-cart"></i>
-                        </div>
-                      </div>
-                      <div class="col col-stats ms-3 ms-sm-0">
-                        <div class="numbers">
-                          <p class="card-category">Sales</p>
-                          <h4 class="card-title">$ 1,345</h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-3">
-                <div class="card card-stats card-round">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-icon">
-                        <div
-                          class="icon-big text-center icon-secondary bubble-shadow-small"
-                        >
-                          <i class="far fa-check-circle"></i>
-                        </div>
-                      </div>
-                      <div class="col col-stats ms-3 ms-sm-0">
-                        <div class="numbers">
-                          <p class="card-category">Order</p>
-                          <h4 class="card-title">576</h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          
+            </div>  
             </div>
             <div class="row">
               <div class="col-md-8">
@@ -845,55 +805,20 @@
                   </div>
                 </div>
               </div>
+
               <div class="col-md-4">
-                <div class="card card-primary card-round">
-                  <div class="card-header">
-                    <div class="card-head-row">
-                      <div class="card-title">Daily Sales</div>
-                      <div class="card-tools">
-                        <div class="dropdown">
-                          <button
-                            class="btn btn-sm btn-label-light dropdown-toggle"
-                            type="button"
-                            id="dropdownMenuButton"
-                            data-bs-toggle="dropdown"
-                            aria-haspopup="true"
-                            aria-expanded="false"
-                          >
-                            Export
-                          </button>
-                          <div
-                            class="dropdown-menu"
-                            aria-labelledby="dropdownMenuButton"
-                          >
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#"
-                              >Something else here</a
-                            >
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card-category">March 25 - April 02</div>
-                  </div>
-                  <div class="card-body pb-0">
-                    <div class="mb-4 mt-2">
-                      <h1>$4,578.58</h1>
-                    </div>
-                    <div class="pull-in">
-                      <canvas id="dailySalesChart"></canvas>
-                    </div>
-                  </div>
-                </div>
+                
                 <div class="card card-round">
-                  <div class="card-body pb-0">
-                    <div class="h1 fw-bold float-end text-primary">+5%</div>
-                    <h2 class="mb-2">17</h2>
-                    <p class="text-muted">Users online</p>
-                    <div class="pull-in sparkline-fix">
-                      <div id="lineChart"></div>
+                  <div class="card-body text-center p-2">
+                    <h3 class="card-title mb-2">Upload Resume</h3>
+                    <div class="d-flex justify-content-center">
+                      <label for="fileUpload" class="btn btn-primary btn-sm">
+                        <i class="fas fa-upload"></i> Choose File
+                      </label>
+                      <input type="file" id="fileUpload" class="d-none">
                     </div>
+                    <p id="fileName" class="mt-2 text-muted small"></p>
+                    <button class="btn btn-success btn-sm mt-2" id="uploadBtn" disabled>Upload</button>
                   </div>
                 </div>
               </div>
@@ -1451,7 +1376,7 @@
                   
                             // document.getElementById("repo-img").innerHTML += `<img src="${response.data.data.repo_list[repo].repo_img}" alt="..."class="avatar-img rounded-circle"/><br>`
 
-                  document.getElementById("repo-name").innerHTML += `<a href="https://github.com/${response.data.data.repo_list[repo].repo_name}" target="_blank" rel="noopener noreferrer">${response.data.data.repo_list[repo].repo_name}</a><br>`
+                  document.getElementById("repo-name").innerHTML += `<a href="https://github.com/${response.data.data.repo_list[repo].repo_name}" target="_blank" rel="noopener noreferrer">${response.data.data.repo_list[repo].repo_name}</a><br><hr>`
                 }
               } 
             })

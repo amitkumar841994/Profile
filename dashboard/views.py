@@ -1,5 +1,5 @@
-from fastapi import APIRouter,Depends,Request,HTTPException
-from dashboard.models import UserExpericeModel
+from fastapi import APIRouter,Depends,Request,HTTPException,Form,UploadFile
+from dashboard.models import UserExpericeModel,UserFileUpload
 from config import db
 import requests
 from datetime import datetime, timedelta
@@ -139,3 +139,17 @@ class GitRepo:
                 "message": f"Error fetching contributions: {str(e)}",
                 "status_code": 500
             }
+
+
+class UploadFileHandler:
+    def __init__(self):
+        self.router =APIRouter()
+        self.router.add_api_route('/upload/resume/',self.upoload_file,methods=['GET'])
+        pass
+    def upoload_file(self,fileUpload:UserFileUpload):    
+        user_id: str = Form(...),
+        file_name: str = Form(...),
+        description: Optional[str] = Form(None),
+        file: UploadFile = File(...)
+
+    
