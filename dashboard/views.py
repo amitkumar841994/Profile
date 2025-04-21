@@ -156,25 +156,25 @@ class UploadFileHandler:
     #     file: UploadFile = File(...)
 
 
-    def upload_file(self):
-        uploads_dir = Path("uploads")
-        uploads_dir.mkdir(exist_ok=True)
-
-        # file_bytes = file.file.read()  # No need to await
-        # file_path = uploads_dir / file_name
+    def upload_file(self,file_data:UserFileUpload):
+        # uploads_dir = Path("uploads")
+        # uploads_dir.mkdir(exist_ok=True)
+        
+        # file_bytes = File.file.read()  # No need to await
+        # file_path = uploads_dir / file_data.file_name
 
         # with open(file_path, "wb") as f:
         #     f.write(file_bytes)
 
         # user_file_data = UserFileUpload(
         #     # user_id=user_id,
-        #     file_name=file_name,
-        #     description=description,
+        #     file_name=file_data.file_name,
+        #     description=file_data.description,
         #     file_size=len(file_bytes),
         #     upload_time=datetime.utcnow()
         # )
 
         return {
             "message": "File uploaded successfully",
-            "data": user_file_data.dict()
+            "data": ">>>>>>>>>>"
         }
