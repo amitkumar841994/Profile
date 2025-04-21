@@ -1387,46 +1387,46 @@
 
 
     </script>
-<script>
-  // Replace this with your backend API URL
-  const apiUrl = 'http://127.0.0.1:8000/userexp/git/contro/';
+    <script>
+      // Replace this with your backend API URL
+      const apiUrl = 'http://127.0.0.1:8000/userexp/git/contro/';
 
-  // Fetch data from the backend and render heatmap
-  axios.get(apiUrl)
-    .then(response => {
-      if (response.data.status_code === 200) {
-        const contributions = response.data.data;
-        console.log(">>>>>>>>>>>>",contributions);
+      // Fetch data from the backend and render heatmap
+      axios.get(apiUrl)
+        .then(response => {
+          if (response.data.status_code === 200) {
+            const contributions = response.data.data;
+            console.log(">>>>>>>>>>>>",contributions);
 
-        // Map the data into a format required by the heatmap library
-        const heatmapData = contributions.map(entry => ({
-          date: entry.date,
-          count: entry.count,
-        }));
+            // Map the data into a format required by the heatmap library
+            const heatmapData = contributions.map(entry => ({
+              date: entry.date,
+              count: entry.count,
+            }));
 
-        // Render the heatmap
-        calendarHeatmap(document.getElementById('contributions'), {
-          data: heatmapData,
-          startDate: new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
-          endDate: new Date(),
-          colorRange: ['#ebedf0', '#c6e48b', '#7bc96f', '#239a3b', '#196127'],
-          tooltipEnabled: true,
-          onClick: (data) => {
-            if (data) {
-              alert(`Date: ${data.date}, Contributions: ${data.count}`);
-            }
+            // Render the heatmap
+            calendarHeatmap(document.getElementById('contributions'), {
+              data: heatmapData,
+              startDate: new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+              endDate: new Date(),
+              colorRange: ['#ebedf0', '#c6e48b', '#7bc96f', '#239a3b', '#196127'],
+              tooltipEnabled: true,
+              onClick: (data) => {
+                if (data) {
+                  alert(`Date: ${data.date}, Contributions: ${data.count}`);
+                }
+              }
+            });
+          } else {
+            console.error('Error fetching contributions:', response.data.message);
+            alert('An error occurred while fetching contributions.');
           }
+        })
+        .catch(error => {
+          console.error('API Error:', error);
+          alert('An error occurred while fetching contributions.');
         });
-      } else {
-        console.error('Error fetching contributions:', response.data.message);
-        alert('An error occurred while fetching contributions.');
-      }
-    })
-    .catch(error => {
-      console.error('API Error:', error);
-      alert('An error occurred while fetching contributions.');
-    });
-</script>
+    </script>
 
 
     <script>
@@ -1442,6 +1442,34 @@
             }
           }
         }
+    </script>
+    <script>
+      const fileInput = document.getElementById("fileUpload");
+      const fileNameDisplay = document.getElementById("fileName");
+      console.log(">>>0>>>>",fileNameDisplay);
+      const uploadBtn = document.getElementById("uploadBtn");
+      userDetails = JSON.parse(localStorage.getItem("Userdetails"))
+    
+      fileInput.addEventListener("change", () => {
+        if (fileInput.files.length > 0) {
+          fileNameDisplay.textContent = fileInput.files[0].name;
+          uploadBtn.disabled = false;
+        }
+      });
+    
+      uploadBtn.addEventListener("click", async () => {
+        const file = fileInput.files[0];
+        const formData = new FormData();
+        formData.append("resume", file);
+    
+        const response = await fetch("http://127.0.0.1:8000/userexp/upload/resume/", {
+          method: "POST",
+          body: formData
+        });
+    
+        const result = await response.json();
+        alert(result.message);
+      });
     </script>
   </body>
 </html>

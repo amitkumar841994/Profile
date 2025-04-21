@@ -1,7 +1,10 @@
-from fastapi import APIRouter,Depends,Request,HTTPException,Form,UploadFile
+from fastapi import APIRouter,Depends,Request,HTTPException,Form,UploadFile , File
 from dashboard.models import UserExpericeModel,UserFileUpload
 from config import db
+from typing import Optional
 import requests
+from pathlib import Path
+
 from datetime import datetime, timedelta
 
 
@@ -144,12 +147,34 @@ class GitRepo:
 class UploadFileHandler:
     def __init__(self):
         self.router =APIRouter()
-        self.router.add_api_route('/upload/resume/',self.upoload_file,methods=['GET'])
+        self.router.add_api_route('/upload/resume/',self.upload_file,methods=['POST'])
         pass
-    def upoload_file(self,fileUpload:UserFileUpload):    
-        user_id: str = Form(...),
-        file_name: str = Form(...),
-        description: Optional[str] = Form(None),
-        file: UploadFile = File(...)
+    # def upoload_file(self,fileUpload:UserFileUpload):    
+    #     user_id: str = Form(...),
+    #     file_name: str = Form(...),
+    #     description: Optional[str] = Form(None),
+    #     file: UploadFile = File(...)
 
-    
+
+    def upload_file(self):
+        uploads_dir = Path("uploads")
+        uploads_dir.mkdir(exist_ok=True)
+
+        # file_bytes = file.file.read()  # No need to await
+        # file_path = uploads_dir / file_name
+
+        # with open(file_path, "wb") as f:
+        #     f.write(file_bytes)
+
+        # user_file_data = UserFileUpload(
+        #     # user_id=user_id,
+        #     file_name=file_name,
+        #     description=description,
+        #     file_size=len(file_bytes),
+        #     upload_time=datetime.utcnow()
+        # )
+
+        return {
+            "message": "File uploaded successfully",
+            "data": user_file_data.dict()
+        }

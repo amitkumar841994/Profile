@@ -1,9 +1,13 @@
 from fastapi import APIRouter
-from .views import UserJobsExperience,GitRepo
+from .views import UserJobsExperience,GitRepo ,UploadFileHandler
 
-# Instantiate the class-based view
+
+router = APIRouter()
+
 userrxp = UserJobsExperience()
-router = userrxp.router
+userupload = UploadFileHandler()
+gitrepo = GitRepo()
 
-gitrepo =GitRepo()
-router = gitrepo.router
+router.include_router(userrxp.router)
+router.include_router(gitrepo.router)
+router.include_router(userupload.router)
