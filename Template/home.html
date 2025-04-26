@@ -779,20 +779,13 @@
                     <div class="card-head-row">
                       <div class="card-title">User Statistics</div>
                       <div class="card-tools">
-                        <a
-                          href="#"
-                          class="btn btn-label-success btn-round btn-sm me-2"
-                        >
-                          <span class="btn-label">
-                            <i class="fa fa-pencil"></i>
-                          </span>
-                          Export
-                        </a>
+                        <input type="file" id="fileInput" class="btn btn-label-info btn-round btn-sm">
+                        <button class="btn-label-info btn-round btn-sm" id="uploadBtn">Upload</button>
                         <a href="#" class="btn btn-label-info btn-round btn-sm">
                           <span class="btn-label">
                             <i class="fa fa-print"></i>
                           </span>
-                          Print
+                          View
                         </a>
                       </div>
                     </div>
@@ -806,22 +799,7 @@
                 </div>
               </div>
 
-              <div class="col-md-4">
-                
-                <div class="card card-round">
-                  <div class="card-body text-center p-2">
-                    <h3 class="card-title mb-2">Upload Resume</h3>
-                    <div class="d-flex justify-content-center">
-                      <label for="fileUpload" class="btn btn-primary btn-sm">
-                        <i class="fas fa-upload"></i> Choose File
-                      </label>
-                      <input type="file" id="fileUpload" class="d-none">
-                    </div>
-                    <p id="fileName" class="mt-2 text-muted small"></p>
-                    <button class="btn btn-success btn-sm mt-2" id="uploadBtn" disabled>Upload</button>
-                  </div>
-                </div>
-              </div>
+    
             </div>
             <div class="row">
               <div class="col-md-12">
@@ -1443,33 +1421,44 @@
           }
         }
     </script>
-    <script>
-      const fileInput = document.getElementById("fileUpload");
-      const fileNameDisplay = document.getElementById("fileName");
-      console.log(">>>0>>>>",fileNameDisplay);
-      const uploadBtn = document.getElementById("uploadBtn");
-      // userDetails = JSON.parse(localStorage.getItem("Userdetails"))
-    
-      fileInput.addEventListener("change", () => {
-        if (fileInput.files.length > 0) {
-          fileNameDisplay.textContent = fileInput.files[0].name;
-          uploadBtn.disabled = false;
-        }
-      });
-    
-      uploadBtn.addEventListener("click", async () => {
-        const file = fileInput.files[0];
-        const formData = new FormData();
-        formData.append("resume", file);
-    
-        const response = await fetch("http://127.0.0.1:8000/userexp/upload/resume/", {
-          method: "POST",
-          body: formData
-        });
-    
-        const result = await response.json();
-        alert(result.message);
-      });
-    </script>
+
+<script>
+  const fileInput = document.getElementById('fileInput');
+  const uploadBtn = document.getElementById('uploadBtn');
+  const fileName = document.getElementById('fileName');
+
+  fileInput.addEventListener('change', () => {
+      if (fileInput.files.length > 0) {
+          fileName.textContent = `Selected file: ${fileInput.files[0].name}`;
+      } else {
+          fileName.textContent = '';
+      }
+  });
+
+  uploadBtn.addEventListener('click', async () => {
+      if (!fileInput.files.length) {
+          toastfunc('red', 'Please select a file!');
+          return;
+      }
+
+      const formData = new FormData();
+      formData.append('user_id', 'mhvmjhgfvkhj');  // Example user ID
+      formData.append('description', 'Test file upload');
+      formData.append('file', fileInput.files[0]);
+
+      try {
+          const response = await fetch('http://localhost:8000/userexp/upload/resume/', {
+              method: 'POST',
+              body: formData
+          });
+
+          const result = await response.json();
+          alert(JSON.stringify(result));
+      } catch (error) {
+          console.error('Error uploading file:', error);
+      }
+  });
+</script>
+
   </body>
 </html>

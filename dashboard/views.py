@@ -4,7 +4,7 @@ from config import db
 from typing import Optional
 import requests
 from pathlib import Path
-
+from bson import Binary
 from datetime import datetime, timedelta
 
 
@@ -145,36 +145,29 @@ class GitRepo:
 
 
 class UploadFileHandler:
-    def __init__(self):
+    def __init__(self, user_id: str, description: str, file: UploadFile):
         self.router =APIRouter()
         self.router.add_api_route('/upload/resume/',self.upload_file,methods=['POST'])
-        pass
-    # def upoload_file(self,fileUpload:UserFileUpload):    
-    #     user_id: str = Form(...),
-    #     file_name: str = Form(...),
-    #     description: Optional[str] = Form(None),
-    #     file: UploadFile = File(...)
+        self.user_id = user_id
+        self.description = description
+        self.file = file   # <-- SAVE file here
 
+    def upload_file(self):
+        file_bytes = self.file.file.read()
 
-    def upload_file(self,file_data:UserFileUpload):
-        # uploads_dir = Path("uploads")
-        # uploads_dir.mkdir(exist_ok=True)
-        
-        # file_bytes = File.file.read()  # No need to await
-        # file_path = uploads_dir / file_data.file_name
+        user_file_data = UserFileUpload(
+            user_id=self.user_id,
+            file_name=self.file.filename,
+            upload_time=datetime.utcnow(),
+            file_size=len(file_bytes),
+            description=self.description
+        )
 
-        # with open(file_path, "wb") as f:
-        #     f.write(file_bytes)
+        document = user_file_data.dict()
+        document["file"] = Binary(file_bytes)
 
-        # user_file_data = UserFileUpload(
-        #     # user_id=user_id,
-        #     file_name=file_data.file_name,
-        #     description=file_data.description,
-        #     file_size=len(file_bytes),
-        #     upload_time=datetime.utcnow()
-        # )
+        db.UserFile.insert_one(document)
 
         return {
-            "message": "File uploaded successfully",
-            "data": ">>>>>>>>>>"
+            "message": "File uploaded successfully"
         }
