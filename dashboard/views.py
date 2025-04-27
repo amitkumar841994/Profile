@@ -145,29 +145,27 @@ class GitRepo:
 
 
 class UploadFileHandler:
-    def __init__(self, user_id: str, description: str, file: UploadFile):
+    def __init__(self):
         self.router =APIRouter()
         self.router.add_api_route('/upload/resume/',self.upload_file,methods=['POST'])
-        self.user_id = user_id
-        self.description = description
-        self.file = file   # <-- SAVE file here
 
-    def upload_file(self):
-        file_bytes = self.file.file.read()
+    def upload_file(self,user_id: str = Form(...),description: Optional[str] = Form(None),file: UploadFile = File(...)):
+        try:
+            file_bytes = file.file.read()
+            user_file_data = UserFileUpload(
+                user_id=user_id,
+                file_name=file.filename,
+                upload_time=datetime.utcnow(),
+                file_size=len(file_bytes),
+                description=description
+            )
 
-        user_file_data = UserFileUpload(
-            user_id=self.user_id,
-            file_name=self.file.filename,
-            upload_time=datetime.utcnow(),
-            file_size=len(file_bytes),
-            description=self.description
-        )
+            document = user_file_data.dict()
+            document["file"] = Binary(file_bytes)
 
-        document = user_file_data.dict()
-        document["file"] = Binary(file_bytes)
+            db.UserFile.insert_one(document)
 
-        db.UserFile.insert_one(document)
+            return {"message": "File uploaded successfully", "status_code": 200}
+        except Exception as e:
+            return {"message": f"{str(e)}", "status_code": 400}
 
-        return {
-            "message": "File uploaded successfully"
-        }

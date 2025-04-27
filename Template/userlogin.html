@@ -51,7 +51,7 @@
                 console.log();
                 if (response.data.status_code==200){
                 toastfunc('green', response.data.message)
-                localStorage.setItem("Userdetails", JSON.stringify(response.data));
+                localStorage.setItem("Userdetails", JSON.stringify(response.data.UserDetails));
                 // getting data from local storage
                 // const userDetails = JSON.parse(localStorage.getItem("Userdetails"));
 

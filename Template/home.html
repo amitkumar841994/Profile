@@ -1374,7 +1374,6 @@
         .then(response => {
           if (response.data.status_code === 200) {
             const contributions = response.data.data;
-            console.log(">>>>>>>>>>>>",contributions);
 
             // Map the data into a format required by the heatmap library
             const heatmapData = contributions.map(entry => ({
@@ -1442,7 +1441,10 @@
       }
 
       const formData = new FormData();
-      formData.append('user_id', 'mhvmjhgfvkhj');  // Example user ID
+      const userDetailsString = localStorage.getItem("Userdetails"); // Step 1: get the string
+      const userDetails = JSON.parse(userDetailsString); 
+      console.log(">>>>>>>>>>>>>>>>>>>>>lcoal storage>>>>>",userDetails)
+      formData.append('user_id', userDetails.user_id);  // Example user ID
       formData.append('description', 'Test file upload');
       formData.append('file', fileInput.files[0]);
 
@@ -1453,9 +1455,22 @@
           });
 
           const result = await response.json();
-          alert(JSON.stringify(result));
+          if (response.status ==200){
+            toastfunc('green', result.message)
+            fileInput.value = '';
+            userIdInput.value = '';
+            descriptionInput.value = '';
+
+          }
+          else{
+            toastfunc('green', result.message)
+
+          }
+          
+          return true
       } catch (error) {
           console.error('Error uploading file:', error);
+          toastfunc('red', result.message)
       }
   });
 </script>
