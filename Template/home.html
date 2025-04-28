@@ -1443,7 +1443,6 @@
       const formData = new FormData();
       const userDetailsString = localStorage.getItem("Userdetails"); // Step 1: get the string
       const userDetails = JSON.parse(userDetailsString); 
-      console.log(">>>>>>>>>>>>>>>>>>>>>lcoal storage>>>>>",userDetails)
       formData.append('user_id', userDetails.user_id);  // Example user ID
       formData.append('description', 'Test file upload');
       formData.append('file', fileInput.files[0]);
@@ -1458,19 +1457,22 @@
           if (response.status ==200){
             toastfunc('green', result.message)
             fileInput.value = '';
-            userIdInput.value = '';
-            descriptionInput.value = '';
+            const file_details = await fetch(`http://localhost:8000/view/resume/${userDetails.user_id}`, {
+              method: 'GET',
+            });
+            const file_result =await file_details.json()
+            console.log(">>>>>>>>>>>>file_result",file_result)
 
           }
           else{
-            toastfunc('green', result.message)
+            toastfunc('red', result.message)
 
           }
           
           return true
       } catch (error) {
           console.error('Error uploading file:', error);
-          toastfunc('red', result.message)
+          toastfunc('red', error)
       }
   });
 </script>

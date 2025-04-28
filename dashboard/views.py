@@ -148,6 +148,7 @@ class UploadFileHandler:
     def __init__(self):
         self.router =APIRouter()
         self.router.add_api_route('/upload/resume/',self.upload_file,methods=['POST'])
+        self.router.add_api_route('view/resume/{user_id}',self.get_file_view,methods=['GET'])
 
     def upload_file(self,user_id: str = Form(...),description: Optional[str] = Form(None),file: UploadFile = File(...)):
         try:
@@ -168,4 +169,14 @@ class UploadFileHandler:
             return {"message": "File uploaded successfully", "status_code": 200}
         except Exception as e:
             return {"message": f"{str(e)}", "status_code": 400}
+        
+    def get_file_view(self,user_id:str):
+
+        file_details = db.UserFile.find({"user_id":user_id})
+         
+        
+
+
+
+
 
