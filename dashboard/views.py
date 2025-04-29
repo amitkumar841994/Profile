@@ -6,6 +6,9 @@ import requests
 from pathlib import Path
 from bson import Binary
 from datetime import datetime, timedelta
+from io import BytesIO
+from fastapi.responses import StreamingResponse
+
 
 
 class UserDashboard:
@@ -148,7 +151,7 @@ class UploadFileHandler:
     def __init__(self):
         self.router =APIRouter()
         self.router.add_api_route('/upload/resume/',self.upload_file,methods=['POST'])
-        self.router.add_api_route('view/resume/{user_id}',self.get_file_view,methods=['GET'])
+        self.router.add_api_route('/view/resume/{user_id}',self.get_file_view,methods=['GET'])
 
     def upload_file(self,user_id: str = Form(...),description: Optional[str] = Form(None),file: UploadFile = File(...)):
         try:
@@ -171,8 +174,29 @@ class UploadFileHandler:
             return {"message": f"{str(e)}", "status_code": 400}
         
     def get_file_view(self,user_id:str):
+        try:
+            print(">>>>>>>>>>>>>its view file ")
+            file_details = db.UserFile.find_one({"user_id":user_id})
+            result = []
+            if not file_details:
+                return {"message": "File not found"}, 404
 
-        file_details = db.UserFile.find({"user_id":user_id})
+            pdf_bytes = file_details["file"]  # this is binary
+            file_stream = BytesIO(pdf_bytes)
+
+            return StreamingResponse(
+                file_stream,
+                media_type="application/pdf",
+                headers={
+                    "Content-Disposition": f'inline; filename="{file_details["file_name"]}"'
+                }
+            )
+        except Exception as e:
+            return {
+                "message": f"Error fetching contributions: {str(e)}",
+                "status_code": 500
+            }
+
          
         
 
