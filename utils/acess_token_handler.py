@@ -21,6 +21,6 @@ class AccessToken:
         return decrypted
     
 
-AccessToken("AFasdfgaWECLS").encrypt()
+
 
 
