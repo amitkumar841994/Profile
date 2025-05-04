@@ -4,14 +4,16 @@ from datetime import datetime
 from typing import Optional
 
 
-class UserExpericeModel(BaseModel):
+class UserExperienceModel(BaseModel):
     userexp_id: UUID = Field(default_factory=uuid4)
     user_id : UUID
+    title : str
+    employment_type :str
     company_name :str 
-    title :str
     start_date :datetime
     end_date :datetime
-    description :str
+    location :str
+
 
 
 class UserFileUpload(BaseModel):

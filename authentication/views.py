@@ -3,6 +3,7 @@ from authentication.models import NewUser,UserLogin
 import uuid
 from config import db
 from utils.password import pwd_context,create_access_token,create_refresh_token
+from utils.acess_token_handler import AccessToken
 import json
 from authentication.auth_config import google,oauth
 from fastapi.responses import RedirectResponse
@@ -66,8 +67,9 @@ class NewUserRegistration:
                         "user_id": str(user_details["_id"]),
                         "email": user_details["email"]
                     }
-                    access_token = create_access_token(user_data)
-                    refresh_token = create_refresh_token(user_data)
+                    access_token = AccessToken(create_access_token(user_data)).encrypt()
+                    
+                    refresh_token = AccessToken(create_refresh_token(user_data)).encrypt()
                     user_details["access_token"]=access_token
                     user_details["refresh_token"]=refresh_token
                     user_details.pop('_id')

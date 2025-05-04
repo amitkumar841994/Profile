@@ -1,5 +1,5 @@
 from fastapi import APIRouter,Depends,Request,HTTPException,Form,UploadFile , File
-from dashboard.models import UserExpericeModel,UserFileUpload
+from dashboard.models import UserExperienceModel,UserFileUpload
 from config import db
 from typing import Optional
 import requests
@@ -33,7 +33,7 @@ class UserJobsExperience:
         else:
             return False
 
-    def create(self,userexp:UserExpericeModel):
+    def create(self,userexp:UserExperienceModel):
         try:
             if self.userccheck(userexp.user_id):
                 print("User already exists")
