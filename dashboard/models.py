@@ -10,9 +10,12 @@ class UserExperienceModel(BaseModel):
     title : str
     employment_type :str
     company_name :str 
-    start_date :datetime
-    end_date :datetime
+    start_month :str
+    start_year : str
+    end_month :Optional[str] = None
+    end_year : Optional[str] = None
     location :str
+    working : bool
 
 
 
