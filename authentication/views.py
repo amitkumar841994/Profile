@@ -67,9 +67,9 @@ class NewUserRegistration:
                         "user_id": str(user_details["_id"]),
                         "email": user_details["email"]
                     }
-                    access_token = AccessToken(create_access_token(user_data)).encrypt()
+                    access_token = create_access_token(user_data)
                     
-                    refresh_token = AccessToken(create_refresh_token(user_data)).encrypt()
+                    refresh_token = create_refresh_token(user_data)
                     user_details["access_token"]=access_token
                     user_details["refresh_token"]=refresh_token
                     user_details.pop('_id')

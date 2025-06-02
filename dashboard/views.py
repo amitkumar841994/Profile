@@ -1,6 +1,8 @@
+import json
+import uuid
 from fastapi import APIRouter,Depends,Request,HTTPException,Form,UploadFile , File
 from dashboard.models import UserExperienceModel,UserFileUpload
-from config import db
+from config import db,manager
 from typing import Optional
 import requests
 from pathlib import Path
@@ -8,7 +10,10 @@ from bson import Binary
 from datetime import datetime, timedelta
 from io import BytesIO
 from fastapi.responses import StreamingResponse
-
+import base64
+from bson.json_util import dumps
+from fastapi import WebSocket, WebSocketDisconnect
+from motor.motor_asyncio import AsyncIOMotorClient
 
 
 class UserDashboard:
@@ -24,6 +29,7 @@ class UserJobsExperience:
     def __init__(self):
         self.router = APIRouter()
         self.router.add_api_route('/experice/create',self.create,methods=['POST'])
+        self.router.add_api_route('/experice/get/{user_id}',self.get,methods=['GET'])
 
 
     def userccheck(self,user_id):
@@ -54,6 +60,45 @@ class UserJobsExperience:
                 "message": str(e),
                 "status_code":400
                 }
+
+
+
+    def get(self, user_id: str):
+        try:
+            # Convert UUID string to Binary with subtype 3
+            uuid_obj = uuid.UUID(user_id)
+            user_id_bin = Binary(uuid_obj.bytes, subtype=3)
+
+            if self.userccheck(user_id_bin):
+                # Query once, store results in a list
+                compqny_cursor = db.UserExperice.find({"user_id": user_id_bin})
+                compqny_details = list(compqny_cursor)
+
+                # Print and return the same result
+                print("compqny_details>>>>>>>>>>>>>>>", json.loads(dumps(compqny_details)))
+                return {
+                    "message": "added successfully",
+                    "data": json.loads(dumps(compqny_details)),
+                    "status_code": 200
+                }
+            else:
+                return {
+                    "message": "User not found",
+                    "data": [],
+                    "status_code": 404
+                }
+
+        except Exception as e:
+            return {
+                "message": str(e),
+                "data": None,
+                "status_code": 400
+            }
+
+            
+
+            
+
 
 class GitRepo:
     def __init__(self):
@@ -198,7 +243,40 @@ class UploadFileHandler:
             }
 
          
-        
+class MessageHandler:
+    def __init__(self):
+        self.router =APIRouter()
+  
+        self.router.add_api_websocket_route('/message/sender/{user_id}',self.sender)
+        client = AsyncIOMotorClient("mongodb+srv://amitkumar841994:bAyyuwJouF5lSctK@cluster0.cl04m.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+        db = client["Profiledb"]
+        self.messages_collection = db["Messages"]
+
+
+    async def sender(self, websocket: WebSocket, user_id: str):  # changed 'username' -> 'user_id'
+        print("WebSocket connection attempt by:", user_id)
+        await manager.connect(websocket)  # ✅ accept inside manager.connect
+
+        try:
+            while True:
+                data = await websocket.receive_text()
+
+            # Save to MongoDB
+                await self.messages_collection.insert_one({
+                    "user_id": user_id,
+                    "message": data,
+                    "timestamp": datetime.utcnow()
+                })
+
+            await manager.broadcast(f"{user_id}: {data}")
+        except WebSocketDisconnect:
+            manager.disconnect(websocket)
+            await manager.broadcast(f"{user_id} left the chat.")
+            print(f"{user_id} left the chat.")
+
+
+
+
 
 
 
